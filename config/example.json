@@ -1,0 +1,17 @@
+{
+	"name": "ThePurge",
+	"telnet":{
+		"host": "www.bluefangsolutions.com",
+		"port": 1000,
+		"password": "<password>"
+	},
+	"messages":{
+		"list":[
+			"Visit ThePurge.online to read rules",
+			"This is a PVE server... except on PVP Sundays, 12pm-Midnight EST",
+			"Rule 1: NO killing/raiding Monday-Saturday Rule 2: NO Hacking"
+		],
+		"color":"[cc0000]",
+		"interval":15
+	}
+}
