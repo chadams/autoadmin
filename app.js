@@ -24,7 +24,7 @@ function sayMessage(msg){
 }
 
 function handleLine(line){
-	console.log(line);
+	//console.log(line);
 	_.forEach(handlers, function(handler, index){
 		var result = handler.test(line)
 		if(result){
