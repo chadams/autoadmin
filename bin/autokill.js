@@ -21,9 +21,10 @@ var defaults = {
 	reason: "No player killing allowed"
 };
 
-function MainClass(options){
-	if (! (this instanceof MainClass)) return new MainClass(options);
+function MainClass(options, logger){
+	if (! (this instanceof MainClass)) return new MainClass(options, logger);
 	this.options = _.extend({}, defaults, options)
+	this.logger = logger
 	Emitter.call(this)
 	this.purge = false
 	this.startPurgeJob = new CronJob(options.start, this.start, _.noop, true, options.timezone, this)
@@ -61,7 +62,7 @@ MainClass.prototype.exec = function(line, sendCommand, sayMessage){
 	var message1 = ['Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
 	var message2 = "Please contact support at thepurge.online to get unbanned"
 
-	logger.log('info', log)
+	this.logger.log('info', log)
 
 	sayMessage(message1)
 	Promise.delay(3000)
