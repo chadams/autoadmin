@@ -57,7 +57,7 @@ MainClass.prototype.exec = function(line, telnet){
 	var victim = res[2]
 
 	var cmd1 = ['kill', killer].join(' ')
-	var cmd2 = ['ban add', killer, options.duration, options.unit, options.reason].join(' ')
+	var cmd2 = ['ban add', killer, options.duration, options.unit, '"'+options.reason+'"'].join(' ')
 	var log = [killer, 'killed player', victim].join(' ')
 	var message1 = ['Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
 	var message2 = "Please contact support at thepurge.online to get unbanned"
@@ -72,8 +72,10 @@ MainClass.prototype.exec = function(line, telnet){
 	})
 	.then(function(){
 		telnet.sendCommand(cmd1)
+		return Promise.delay(5000)
+	})
+	.then(function(){
 		telnet.sendCommand(cmd2)
-		return true
 	})
 }
 
