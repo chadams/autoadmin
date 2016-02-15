@@ -17,7 +17,8 @@ var defaults = {
 	stop : "00 59 23 * * 0",
 	timezone: 'America/New_York',	
 	duration: 5,
-	unit: 'days'
+	unit: 'days',
+	reason: "No player killing allowed"
 };
 
 function MainClass(options){
@@ -54,7 +55,8 @@ MainClass.prototype.exec = function(line, sendCommand, sayMessage){
 	var killer = res[1]
 	var victim = res[2]
 
-	var cmd = ['ban', killer, options.duration, options.unit].join(' ')
+	var cmd1 = ['kill', killer].join(' ')
+	var cmd2 = ['ban add', killer, options.duration, options.unit, options.reason].join(' ')
 	var log = [killer, 'killed player', victim].join(' ')
 	var message1 = ['Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
 	var message2 = "Please contact support at thepurge.online to get unbanned"
@@ -68,8 +70,8 @@ MainClass.prototype.exec = function(line, sendCommand, sayMessage){
 		return Promise.delay(5000)
 	})
 	.then(function(){
-		console.log(cmd);
-		//sendCommand(cmd)
+		sendCommand(cmd1)
+		sendCommand(cmd2)
 		return true
 	})
 }
