@@ -20,17 +20,34 @@ function MainClass(options){
 	if (! (this instanceof MainClass)) return new MainClass(options);
 	this.options = _.extend({}, defaults, options)
 	this.running = false;
+	this.plugins = [];
 	Emitter.call(this)
 };
 
 MainClass.prototype._connect = function(){
   // Login
+  this.running = true
   this.sendCommand(this.options.password);
 	this.emit('connect')
 }
 
 MainClass.prototype._data = function(data){
+  var line = (data+'')
+  if(line.charCodeAt(0) !== 13){ // carriage return CR
+  	this._handleLine(line)
+  }
 	this.emit('data', data)
+}
+
+MainClass.prototype._handleLine = function(line){
+	//console.log('line', line);
+	var self = this;
+	_.forEach(this.plugins, function(handler, index){
+		var result = handler.test(line)
+		if(result){
+			handler.exec(line, self.sendCommand, self.sayMessage)
+		}
+	})
 }
 
 MainClass.prototype._end = function(had_error){
@@ -65,6 +82,7 @@ MainClass.prototype.connect = function(){
 
 MainClass.prototype.close = function(cmd){
 	this.socket.destroy()
+	this.running = false
 }
 
 MainClass.prototype.reconnect = function(cmd){
@@ -78,7 +96,9 @@ MainClass.prototype.reconnect = function(cmd){
 }
 
 MainClass.prototype.sendCommand = function(cmd){
-	//console.log(cmd)
+	if(!this.running){
+		return;
+	}
 	this.socket.write(cmd+'\r\n');
 }
 
@@ -86,7 +106,9 @@ MainClass.prototype.sayMessage = function(msg){
 	this.sendCommand('say "'+msg+'"');
 }
 
-
+MainClass.prototype.setPlugins = function(list){
+	this.plugins = list
+}
 
 
 util.inherits(MainClass, Emitter);

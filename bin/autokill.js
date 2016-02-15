@@ -1,4 +1,3 @@
-
 /*
 
 auto kills players who player kill
@@ -6,52 +5,87 @@ ban	<playername> <duration> <unit>	Bans user for period specified by duration an
  */
 
 var _ = require('lodash')
+var Emitter = require('emmett')
+var util = require('util')
 var Promise = require('bluebird')
+var CronJob = require('cron').CronJob;
 
 var re = /Player (.+) eliminated Player (.+)/;
 
 var defaults = {
+	start: "00 00 12 * * 0",
+	stop : "00 59 23 * * 0",
+	timezone: 'America/New_York',	
 	duration: 5,
-	unit: 'days' 
+	unit: 'days'
 };
 
-module.exports = function(options, logger){
+function MainClass(options){
+	if (! (this instanceof MainClass)) return new MainClass(options);
+	this.options = _.extend({}, defaults, options)
+	Emitter.call(this)
+	this.purge = false
+	this.startPurgeJob = new CronJob(options.start, this.start, _.noop, true, options.timezone, this)
+	this.stopPurgeJob = new CronJob(options.stop, this.stop, _.noop, true, options.timezone, this)
+};
 
-	options = _.extend({}, defaults, options)
-
-	return {
-
-		test: function(line){
-	 		return re.test(line)
-		},
-
-		exec: function(line, sendCommand, sayMessage){
-	 		var res = re.exec(line)
-	 		var killer = res[1]
-	 		var victim = res[2]
-
-	 		var cmd = ['ban', killer, options.duration, options.unit].join(' ')
-	 		var log = [killer, 'killed player', victim].join(' ')
-	 		var message1 = ['Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
-	 		var message2 = "Please contact support at thepurge.online to get unbanned"
-
-	 		logger.log('info', log)
-
-	 		sayMessage(message1)
-	 		Promise.delay(3000)
-	 		.then(function(){
-	 			sayMessage(message2)
-	 			return Promise.delay(5000)
-	 		})
-	 		.then(function(){
-	 			console.log(cmd);
-	 			//sendCommand(cmd)
-	 			return true
-	 		})
-
-
-		}
-
-	}
-
+MainClass.prototype.start = function(line){
+	console.log('START the purge')
+	this.purge = true
 }
+
+MainClass.prototype.stop = function(line){
+	console.log('STOP the purge')
+	this.purge = false
+}
+
+//////
+
+MainClass.prototype.test = function(line){
+	return re.test(line)
+}
+
+MainClass.prototype.exec = function(line, sendCommand, sayMessage){
+	if(this.purge){
+		return; // killing is allowed
+	}
+	var options = this.options
+	var res = re.exec(line)
+	var killer = res[1]
+	var victim = res[2]
+
+	var cmd = ['ban', killer, options.duration, options.unit].join(' ')
+	var log = [killer, 'killed player', victim].join(' ')
+	var message1 = ['Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
+	var message2 = "Please contact support at thepurge.online to get unbanned"
+
+	logger.log('info', log)
+
+	sayMessage(message1)
+	Promise.delay(3000)
+	.then(function(){
+		sayMessage(message2)
+		return Promise.delay(5000)
+	})
+	.then(function(){
+		console.log(cmd);
+		//sendCommand(cmd)
+		return true
+	})
+}
+
+util.inherits(MainClass, Emitter);
+
+
+module.exports = MainClass;
+
+
+
+
+
+
+
+
+
+
+
