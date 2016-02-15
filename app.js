@@ -6,6 +6,7 @@ logger.remove(logger.transports.Console);
 
 var telnet = require('./bin/telnet')(config.telnet, logger)
 var messages = require('./bin/messages')(config.messages, logger)
+var respawn = require('./bin/respawn')(config.respawn, logger)
 
 // init plugins
 var autokill = require('./bin/autokill')(config.autokill, logger)
