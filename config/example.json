@@ -1,8 +1,8 @@
 {
 	"name": "ThePurge",
 	"telnet":{
-		"host": "www.bluefangsolutions.com",
-		"port": 1000,
+		"host": "tracks.bluefangsolutions.com",
+		"port": 11130,
 		"password": "<password>"
 	},
 	"messages":{
@@ -13,5 +13,14 @@
 		],
 		"color":"[cc0000]",
 		"interval":15
+	},
+	"autokill":{
+		"start": "00 00 12 * * 0",
+		"stop" : "00 59 23 * * 0",
+		"timezone": "America/New_York",	
+		"duration": 5,
+		"unit": "days",
+		"reason": "No player killing except on Sundays 12pm-Midnight EST",
+		"color":"[cc0000]"
 	}
 }

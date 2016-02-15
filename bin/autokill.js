@@ -18,7 +18,8 @@ var defaults = {
 	timezone: 'America/New_York',	
 	duration: 5,
 	unit: 'days',
-	reason: "No player killing allowed"
+	reason: "No player killing allowed",
+	color: "[cc0000]"
 };
 
 function MainClass(options, logger){
@@ -59,8 +60,8 @@ MainClass.prototype.exec = function(line, telnet){
 	var cmd1 = ['kill', killer].join(' ')
 	var cmd2 = ['ban add', killer, options.duration, options.unit, '"'+options.reason+'"'].join(' ')
 	var log = [killer, 'killed player', victim].join(' ')
-	var message1 = ['Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
-	var message2 = "Please contact support at thepurge.online to get unbanned"
+	var message1 = [options.color+'Player killing is not allowed', killer, 'you will be banned for', options.duration, options.unit].join(' ')
+	var message2 = options.color+"Please contact support at thepurge.online to get unbanned"
 
 	this.logger.log('info', log)
 
