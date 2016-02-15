@@ -45,7 +45,7 @@ MainClass.prototype._handleLine = function(line){
 	_.forEach(this.plugins, function(handler, index){
 		var result = handler.test(line)
 		if(result){
-			handler.exec(line, self.sendCommand, self.sayMessage)
+			handler.exec(line, self)
 		}
 	})
 }

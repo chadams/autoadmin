@@ -47,7 +47,7 @@ MainClass.prototype.test = function(line){
 	return re.test(line)
 }
 
-MainClass.prototype.exec = function(line, sendCommand, sayMessage){
+MainClass.prototype.exec = function(line, telnet){
 	if(this.purge){
 		return; // killing is allowed
 	}
@@ -64,15 +64,15 @@ MainClass.prototype.exec = function(line, sendCommand, sayMessage){
 
 	this.logger.log('info', log)
 
-	sayMessage(message1)
+	telnet.sayMessage(message1)
 	Promise.delay(3000)
 	.then(function(){
-		sayMessage(message2)
+		telnet.sayMessage(message2)
 		return Promise.delay(5000)
 	})
 	.then(function(){
-		sendCommand(cmd1)
-		sendCommand(cmd2)
+		telnet.sendCommand(cmd1)
+		telnet.sendCommand(cmd2)
 		return true
 	})
 }

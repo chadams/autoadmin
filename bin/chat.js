@@ -22,7 +22,7 @@ module.exports = function(options, logger){
 	 		return re.test(line)
 		},
 
-		exec: function(line, sendCommand, sayMessage){
+		exec: function(line, telnet){
 	 		var res = re.exec(line)
 	 		var message = res[1]
 
