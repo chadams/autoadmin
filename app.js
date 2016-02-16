@@ -21,5 +21,6 @@ messages.on('say', function(msg){
 })
 
 telnet.connect()
+messages.start()
 
 
