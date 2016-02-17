@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "forever": "pm2 start app.js --merge-logs --log-date-format=\"YYYY-MM-DD HH:mm Z\""
+    "forever": "pm2 start app.js --merge-logs --log-date-format \"YYYY-MM-DD HH:mm Z\""
   },
   "author": "",
   "license": "ISC",
