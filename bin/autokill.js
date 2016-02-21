@@ -57,6 +57,11 @@ MainClass.prototype.exec = function(line, telnet){
 	var killer = res[1]
 	var victim = res[2]
 
+	// don't kill self
+	if(killer === victim){
+		return;
+	}
+
 	var cmd1 = ['kill', killer].join(' ')
 	var cmd2 = ['ban add', killer, options.duration, options.unit, '"'+options.reason+'"'].join(' ')
 	var log = [killer, 'killed player', victim].join(' ')
