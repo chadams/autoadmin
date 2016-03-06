@@ -6,6 +6,7 @@ logger.remove(logger.transports.Console);
 
 var telnet = require('./bin/telnet')(config.telnet, logger)
 var messages = require('./bin/messages')(config.messages, logger)
+var alerts = require('./bin/messages')(config.alerts, logger)
 var respawn = require('./bin/respawn')(config.respawn, logger)
 
 // init plugins
@@ -17,6 +18,9 @@ telnet.setPlugins([chat, autokill])
 
 // events
 messages.on('say', function(msg){
+	telnet.sayMessage(msg.data);
+})
+alerts.on('say', function(msg){
 	telnet.sayMessage(msg.data);
 })
 
