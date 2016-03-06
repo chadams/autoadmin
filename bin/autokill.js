@@ -19,7 +19,8 @@ var defaults = {
 	duration: 5,
 	unit: 'days',
 	reason: "No player killing allowed",
-	color: "[cc0000]"
+	color: "[cc0000]",
+	autostart: false
 };
 
 function MainClass(options, logger){
@@ -30,6 +31,11 @@ function MainClass(options, logger){
 	this.purge = false
 	this.startPurgeJob = new CronJob(options.start, this.start, _.noop, true, options.timezone, this)
 	this.stopPurgeJob = new CronJob(options.stop, this.stop, _.noop, true, options.timezone, this)
+
+	if(this.options.autostart){
+		this.start()
+	}
+
 };
 
 MainClass.prototype.start = function(line){
