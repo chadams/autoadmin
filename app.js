@@ -5,8 +5,10 @@ logger.add(logger.transports.File, { filename: './logs/current.log' });
 logger.remove(logger.transports.Console);
 
 var telnet = require('./bin/telnet')(config.telnet, logger)
-var messages = require('./bin/messages')(config.messages, logger)
-var alerts = require('./bin/messages')(config.alerts, logger)
+
+var MessagesController = require('./bin/messages')
+var messages = MessagesController(config.messages, logger)
+var alerts = MessagesController(config.alerts, logger)
 var respawn = require('./bin/respawn')(config.respawn, logger)
 
 // init plugins
@@ -26,5 +28,6 @@ alerts.on('say', function(msg){
 
 telnet.connect()
 messages.start()
+alerts.start()
 
 
